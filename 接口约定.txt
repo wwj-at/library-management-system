@@ -1,0 +1,52 @@
+书籍信息以及借阅记录用struct，哈希表和借阅记录链用class
+struct bookInfo里面存书籍信息，struct bookDetail里面存bookInfo和这本书的借阅记录record[]，struct takeInfo存借阅信息,里面有借书人名字，日期，struct RecordInfo存借阅记录信息
+
+哈希表存放书籍节点，书籍节点内有next指针指向同一个桶的下一本书，recordHead指向借阅记录链，借阅记录链是借阅记录组成的链表
+
+每层有自己的Status状态码，不要混用
+我：TableStatus
+OK                 成功
+NOT_FOUND          键不存在
+DUPLICATE          键已存在
+NO_COPY            库存已为0
+NO_UNRETURNED      没有未还的记录
+OUT_OF_MEMORY      分配失败
+
+Z：FileStatus
+加载    不使用单独状态码，用结构体
+保存    OK/CANNOT_OPEN/WRITE_FAILED
+
+S：BusinessStatus
+OK		-		借阅成功
+BOOK_NOT_FOUND	表 NOT_FOUND	没有这本书
+NO_AVAILABLE_COPY	表 NO_COPY	这本书暂时都借出去了
+ALREADY_BORROWED_BY_USER	S 自己判断（查记录链）	你还没还这本，不能再借
+NO_ACTIVE_RECORD	表 NO_UNRETURNED	这本书没有被借出过
+INVALID_INPUT	S 自己判断	借阅人不能为空
+INTERNAL_ERROR	兜底	系统错误
+
+
+
+所需接口：
+
+Z:
+insert(bookInfo);//插入一本书籍
+addRecord(bookISBN,takeInfo);//写入一条借阅记录
+getBookCount(int &num);//获取所有书籍的数目
+collectAllBooks(bookInfo[],int &num);//获取所有书籍的信息，record[]为空
+collectRecord(bookISBN,RecordInfo[],int &num)//获取某本书的所有借阅记录
+
+S:
+findBook(bookISBN,&bookInfo);//获取某本书的信息，record[]为空
+collectRecord(bookISBN,RecordInfo[],int &num)//获取某本书的所有借阅记录
+takeOneCopy(bookISBN);//取出一本书
+addRecord(bookISBN,takeInfo);//写入一条借阅记录
+putBackOneCopy(bookISBN);//放回一本书
+closeRecord(bookISBN,takeInfo);//将借阅记录标为已还
+
+Q（面向S）:
+searchBook(bookISBN,&bookDetail);//获取书本信息
+listAllBooks(bookInfo[]);//列出所有书
+getBookRecords(bookISBN,records[]);//获取某本书的借阅记录
+borrowBook(bookISBN,takeInfo);//借书
+returnBook(bookISBN,takeInfo);//还书
