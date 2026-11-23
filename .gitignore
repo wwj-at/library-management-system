@@ -1,0 +1,5 @@
+#忽略Dev-C++的本地配置和自动生成文件
+*.layout
+Makefile.win
+*.exe
+*.o

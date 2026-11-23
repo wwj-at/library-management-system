@@ -1,9 +1,10 @@
 书籍信息以及借阅记录用struct，哈希表和借阅记录链用class
-struct bookInfo里面存书籍信息，struct bookDetail里面存bookInfo和这本书的借阅记录record[]，struct takeInfo存借阅信息,里面有借书人名字，日期，struct RecordInfo存借阅记录信息
+struct bookInfo里面存书籍信息，struct bookDetail里面存bookInfo和这本书的借阅记录record[]，struct takeInfo存借阅信息,里面有借书人名字，struct RecordInfo存借阅记录信息
 
 哈希表存放书籍节点，书籍节点内有next指针指向同一个桶的下一本书，recordHead指向借阅记录链，借阅记录链是借阅记录组成的链表
 
 每层有自己的Status状态码，不要混用
+使用时要带作用域访问，如TableStatus::OK
 我：TableStatus
 OK                 成功
 NOT_FOUND          键不存在
@@ -30,7 +31,7 @@ INTERNAL_ERROR	兜底	系统错误
 所需接口：
 
 Z:
-insert(bookInfo);//插入一本书籍
+insertBook(bookInfo);//插入一本书籍
 addRecord(bookISBN,takeInfo);//写入一条借阅记录
 getBookCount(int &num);//获取所有书籍的数目
 collectAllBooks(bookInfo[],int &num);//获取所有书籍的信息，record[]为空
